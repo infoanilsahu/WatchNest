@@ -1,7 +1,7 @@
 import NextAuth, {type NextAuthOptions} from "next-auth"
 import GoogleProvider from "next-auth/providers/google"
-import { db } from "../../../db/db";
-import { usersTable } from "./../../../db/schema";
+import { db } from "../../../../db/db";
+import { usersTable } from "../../../../db/schema";
 import { eq, or } from "drizzle-orm";
 
 
@@ -23,25 +23,20 @@ export const authOptions: NextAuthOptions = {
 
       if( !user.email ) return false;
 
-      const [existingUser] = await db.select().from(usersTable).where(
-        eq(usersTable.email, user.email),
-      )
-
-      if( !existingUser ) {
-        await db.insert(usersTable).values({
-          email: user.email,
+      await db.insert(usersTable).values({
+        email: user.email,
+        accessToken: account?.access_token,
+        refreshToken: account?.refresh_token,
+        tokenExpiresAt: account?.expires_at
+      }).onConflictDoUpdate({
+        target: usersTable.email,
+        set: {
           accessToken: account?.access_token,
           refreshToken: account?.refresh_token,
           tokenExpiresAt: account?.expires_at
-        })
-      }
-      else {
-        await db.update(usersTable).set({
-          accessToken: account?.access_token,
-          refreshToken: account?.refresh_token ?? existingUser.refreshToken,
-          tokenExpiresAt: account?.expires_at 
-        }).where(eq(usersTable.email, user.email))
-      }
+        }
+      })
+      
 
       return true
     }
@@ -49,4 +44,5 @@ export const authOptions: NextAuthOptions = {
 
 }
 
-export default NextAuth(authOptions)
+const handler = NextAuth(authOptions)
+export {handler as GET, handler as POST}
