@@ -11,6 +11,10 @@ if( !process.env.GOOGLE_ID || !process.env.GOOGLE_SECRET ) {
   throw new Error("ClientId or ClientSecret is missing.")
 }
 
+if( !process.env.JWT_SECRET || !process.env.JWT_EXPIRY ) {
+  throw new Error("JWT_SECRET or JWT_EXPIRY is missing.")
+}
+
 export const authOptions: NextAuthOptions = {
   // Configure one or more authentication providers
   providers: [
@@ -70,7 +74,7 @@ export const authOptions: NextAuthOptions = {
             accountId: accountData.id,
             email: existUserData.email,
           },
-          process.env.JWT_SECRET!,
+          process.env.JWT_SECRET as string,
           {
             expiresIn: process.env.JWT_EXPIRY as SignOptions["expiresIn"],
           }
