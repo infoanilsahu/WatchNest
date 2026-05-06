@@ -1,12 +1,12 @@
 import { db } from "@/db/db";
 import { accountTable, usersTable } from "@/db/schema";
 import { account } from "@/validation/account";
-import { and, eq, or } from "drizzle-orm";
+import { eq, or } from "drizzle-orm";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
     try {
-        
+
         const json = await req.json()
         const parseData = account.safeParse(json)
         if( !parseData.success ) {
@@ -22,8 +22,8 @@ export async function POST(req: NextRequest) {
         )
         if( !loginUser ) {
             return NextResponse.json({
-                message: "unauthrized access"
-            }, {status: 404})
+                message: "unauthorized access"
+            }, {status: 401})
         }
     
         const existUser = await db.select().from(accountTable).where(
@@ -34,7 +34,7 @@ export async function POST(req: NextRequest) {
         )
         if( existUser.length > 0 ) {
             return NextResponse.json({
-                message: "username already exists"
+                message: "Username already exists or user already has an account"
             }, {status: 400})
         }
 
@@ -42,7 +42,7 @@ export async function POST(req: NextRequest) {
             username: username,
             name: name, 
             userId: loginUser.id,
-        })
+        }).returning()
 
         return NextResponse.json({
             message: "User Account create successfully", 
