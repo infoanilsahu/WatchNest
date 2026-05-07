@@ -26,7 +26,7 @@ export const videosTable = pgTable("videos", {
   accountId: integer().notNull().references(() => accountTable.id),
 });
 
-const visibleEnum = pgEnum("visible", ["public", "private"]);
+export const visibleEnum = pgEnum("visible", ["public", "private"]);
 
 
 export const playlistsTable = pgTable("playlists", {
@@ -34,7 +34,7 @@ export const playlistsTable = pgTable("playlists", {
   title: varchar().notNull(),
   description: varchar(),
   timestamp: timestamp().defaultNow().notNull(),
-  visble: visibleEnum().notNull().default("private"),
+  visible: visibleEnum().notNull().default("private"),
 
   accountId: integer().notNull().references(() => accountTable.id)
 });
