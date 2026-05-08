@@ -25,7 +25,8 @@ export default function Account() {
             
             router.push("/dashboard")
         }
-    }, [status, router])
+        else if( status === "unauthenticated" ) router.push("/auth/login")
+    }, [status, router, session])
 
 
     async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -44,8 +45,8 @@ export default function Account() {
                     email
                 })
 
-                if( res.status === 200 || res.status === 2001 ) {
-                    await update({ email: session?.user?.email })
+                if( res.status === 200 || res.status === 201 ) {
+                    await update({ userId: res.data.account[0].userId })
                     router.push("/dashboard")
                 }
 

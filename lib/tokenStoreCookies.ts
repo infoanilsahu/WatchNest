@@ -3,6 +3,12 @@ import { cookies } from "next/headers";
 export async function cookiesToken(tokenName: string, token: string) {
     const cookieStorage = await cookies()
     cookieStorage.set(tokenName, token)
+    // cookieStorage.set(tokenName, token, {                   
+    //     httpOnly: true,
+    //     secure: process.env.NODE_ENV === "production",
+    //     sameSite: "lax",
+    //     path: "/"
+    // })
 }
 
 interface GetCookiesTokenProp {

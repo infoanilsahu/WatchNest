@@ -11,8 +11,6 @@ export default function Login() {
   const { data: session ,status } = useSession();
   const router = useRouter();
 
-    console.log("hasAccount : ",session?.hasAccount);
-    console.log("token : ", session?.myJwt)
 
   useEffect(() => {
     if (status === "authenticated" && session.hasAccount == false ) {
@@ -21,7 +19,7 @@ export default function Login() {
     else if( status === "authenticated" && session.hasAccount == true ) {
         router.push("/dashboard")
     }
-  }, [status, router]);
+  }, [status, router, session?.hasAccount]);
 
   if (status === "loading") {
     return (

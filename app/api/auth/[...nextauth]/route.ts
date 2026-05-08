@@ -92,13 +92,13 @@ export const authOptions: NextAuthOptions = {
         
 
       }
-      else if( trigger === "update" && session?.email ) {
+      else if( trigger === "update" && session?.userId ) {
         
          // find user
         const dbUser = await db
           .select()
           .from(usersTable)
-          .where(eq(usersTable.email, session.email))
+          .where(eq(usersTable.id, session.userId))
           .then((res) => res[0]);
 
         if (!dbUser) return token;
@@ -130,7 +130,7 @@ export const authOptions: NextAuthOptions = {
         token.myJwt = myJwt;
         token.hasAccount = true;
 
-        cookiesToken("myJwt",myJwt);
+        await cookiesToken("myJwt",myJwt);
 
       }
       else {
