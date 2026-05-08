@@ -4,6 +4,7 @@ import { db } from "../../../../db/db";
 import { accountTable, usersTable } from "../../../../db/schema";
 import { eq } from "drizzle-orm";
 import jwt, { SignOptions } from "jsonwebtoken";
+import { cookiesToken, GetCookiesToken } from "@/lib/tokenStoreCookies";
 
 
 
@@ -42,9 +43,9 @@ export const authOptions: NextAuthOptions = {
       return true
     },
 
-    async jwt({user, token}) {
+    async jwt({user, token, trigger, session}) {
 
-      if(user) {
+      if(user) {        
 
         if( !user.email ) {
           throw new Error("email is missing ");
@@ -87,10 +88,63 @@ export const authOptions: NextAuthOptions = {
         token.myJwt = myJwt;
         token.hasAccount = true;
 
+        cookiesToken("myJwt",myJwt);
+        
 
       }
+      else if( trigger === "update" && session?.userId ) {
+        
+         // find user
+        const dbUser = await db
+          .select()
+          .from(usersTable)
+          .where(eq(usersTable.id, session.userId))
+          .then((res) => res[0]);
 
+        if (!dbUser) return token;
+
+        const account = await db
+          .select()
+          .from(accountTable)
+          .where(eq(accountTable.userId, dbUser.id))
+          .then((res) => res[0]);
+
+        if (!account) return token;
+
+        const myJwt = jwt.sign(
+          {
+            userId: dbUser.id,
+            accountId: account.id,
+            email: dbUser.email,
+          },
+          process.env.JWT_SECRET as string,
+          {
+            expiresIn: process.env.JWT_EXPIRY as SignOptions["expiresIn"],
+          }
+        );
+
+        await db.update(usersTable).set({
+          token: myJwt
+        }).where(eq(usersTable.id, dbUser.id))
+
+        token.myJwt = myJwt;
+        token.hasAccount = true;
+
+        await cookiesToken("myJwt",myJwt);
+
+      }
+      else {
+        const { hasToken, token: Token } = await GetCookiesToken("myJwt")
+        if( hasToken === true ) {
+          token.hasAccount = true
+          token.myJwt = Token
+        }
+        
+      }
+      
+  
       return token;
+
     },
 
     async session({ session, token }) {
