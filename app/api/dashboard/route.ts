@@ -40,7 +40,7 @@ export async function GET(req: NextRequest) {
             eq(accountTable.id, accountId)
         ).then((res) => res[0])
         if( !userData || userData.userId !== userId ) {
-            throw new Error("token doesn't match token userId and account userId ")
+            return NextResponse.json({ message: "unauthorized." }, { status: 401 });
         }
 
         const videos = await db.select().from(videosTable).where(
@@ -70,7 +70,7 @@ export async function GET(req: NextRequest) {
 
 
         
-    } catch (err: any) {
+    } catch (err: unknown) {
 
         console.error("server error: ", err)
 
