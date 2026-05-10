@@ -13,28 +13,28 @@ export async function POST(req: NextRequest) {
         try {
 
             tokenData = await TokenData("myJwt")
-            
+
         } catch (err: unknown) {
             return NextResponse.json({
                 message: err instanceof Error ? err.message : "Server Error"
             }, { status: 401 });
         }
 
-        const {accountId, email, userId} = tokenData
+        const { accountId, email, userId } = tokenData
 
         const json = await req.json()
         const parseJson = userPaylistData.safeParse(json)
-        if( !parseJson.success ) {
+        if (!parseJson.success) {
             return NextResponse.json({
                 message: parseJson.error.message
-            }, {status: 400})
+            }, { status: 400 })
         }
 
         const { userId: reqUserId, playlistId } = parseJson.data
-        if( reqUserId !== userId ) {
+        if (reqUserId !== userId) {
             return NextResponse.json({
                 message: "invalid token"
-            }, {status: 400})
+            }, { status: 400 })
         }
 
         const playlist = await db.select().from(playlistsTable).where(
@@ -43,10 +43,10 @@ export async function POST(req: NextRequest) {
                 eq(playlistsTable.accountId, accountId)
             )
         ).then((res) => res[0])
-        if( !playlist ) {
+        if (!playlist) {
             return NextResponse.json({
                 message: "playlist not found"
-            }, {status: 400})
+            }, { status: 400 })
         }
 
         const videos = await db.select().from(videosTable).where(
@@ -57,19 +57,19 @@ export async function POST(req: NextRequest) {
         )
 
         return NextResponse.json({
-            playlistName: playlist,
-            videos: videos
-        }, {status: 200})
+            playlist,
+            videos
+        }, { status: 200 })
 
-        
-        
+
+
     } catch (err: unknown) {
-        
+
         console.error("server error: ", err)
 
         return NextResponse.json({
             message: "server error"
-        }, {status: 500})
-        
+        }, { status: 500 })
+
     }
 }
