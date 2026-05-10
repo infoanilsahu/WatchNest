@@ -1,6 +1,6 @@
 import { cookies } from "next/headers";
 import { token } from "@/validation/token";
-import { NextResponse } from "next/server";
+import jwt from "jsonwebtoken"
 
 interface TokenProp {
     userId: number;
@@ -15,11 +15,23 @@ export async function TokenData(str: string): Promise<TokenProp> {
         throw new Error("Unauthorized")
     }
 
-    const ParseToken = token.safeParse(decodedToken?.value)
+    if( !process.env.JWT_SECRET ) {
+        throw new Error("server error")
+    }
+
+    let payload;
+
+    try {
+        payload = jwt.verify(decodedToken.value, process.env.JWT_SECRET)
+    } catch (err: unknown) {
+        throw new Error("Invalid token")
+    }
+
+    const ParseToken = token.safeParse(payload)
     if( !ParseToken.success ) {
         throw new Error(ParseToken.error.message)
     }
 
     return ParseToken.data
-
+    
 }
