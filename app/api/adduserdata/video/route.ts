@@ -38,11 +38,6 @@ export async function POST(req: NextRequest) {
             accountId
         }).returning().then((res) => res[0])
 
-        if( !video ) {
-            return NextResponse.json({
-                message: "video not uploaded"
-            }, {status: 400})
-        }
 
         return NextResponse.json({
             message: "video uploaded successfully",
