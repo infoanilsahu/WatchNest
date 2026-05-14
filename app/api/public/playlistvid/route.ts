@@ -17,25 +17,30 @@ export async function POST(req: NextRequest) {
 
         const { accountId, playlistId } = parseJson.data
 
-        const account = await db.select().from(accountTable).where(
+        const account = await db.select({
+            id: accountTable.id,
+            username: accountTable.username,
+            name: accountTable.name
+        }).from(accountTable).where(
             eq(accountTable.id, accountId)
         ).then(res => res[0])
         if( !account ) {
             return NextResponse.json({
                 message: "account not found"
-            }, {status: 400})
+            }, {status: 404})
         }
 
         const playlist = await db.select().from(playlistsTable).where(
             and(
                 eq(playlistsTable.id, playlistId),
+                eq(playlistsTable.accountId, account.id),
                 eq(playlistsTable.visible, "public")
             )
         ).then(res => res[0])
         if( !playlist ) {
             return NextResponse.json({
                 message: "playlist not found"
-            }, {status: 400})
+            }, {status: 404})
         }
 
         const video = await db.select().from(videosTable).where(
