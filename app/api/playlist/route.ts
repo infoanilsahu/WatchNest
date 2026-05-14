@@ -15,8 +15,9 @@ export async function POST(req: NextRequest) {
             tokenData = await TokenData("myJwt")
 
         } catch (err: unknown) {
+            console.log("auth err: ", err)
             return NextResponse.json({
-                message: err instanceof Error ? err.message : "Server Error"
+                message: "Unauthorized"
             }, { status: 401 });
         }
 

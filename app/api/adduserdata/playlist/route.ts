@@ -1,7 +1,7 @@
 import { db } from "@/db/db";
-import { videosTable } from "@/db/schema";
+import { playlistsTable, videosTable } from "@/db/schema";
 import { TokenData } from "@/lib/tokenData";
-import { addVideo } from "@/validation/addUserData";
+import { addPlaylist } from "@/validation/addUserData";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
@@ -23,25 +23,24 @@ export async function POST(req: NextRequest) {
         const { accountId, email, userId } = tokenData
 
         const json = await req.json()
-        const parseJson = addVideo.safeParse(json)
+        const parseJson = addPlaylist.safeParse(json)
         if( !parseJson.success ) {
             return NextResponse.json({
                 message: parseJson.error.message
-            }, { status: 400 })
+            }, {status: 400})
         }
 
-        const {title, description, link} = parseJson.data
+        const { title, description, visible } = parseJson.data
 
-        const video = await db.insert(videosTable).values({
+        const playlist = await db.insert(playlistsTable).values({
             title,
             description,
-            link,
+            visible,
             accountId
         }).returning().then((res) => res[0])
 
-
         return NextResponse.json({
-            message: "video uploaded successfully",
+            message: "playlist added successfully"
         }, {status: 200})
         
 
