@@ -2,7 +2,7 @@ import { db } from "@/db/db";
 import { playlistsTable, videosTable } from "@/db/schema";
 import { TokenData } from "@/lib/tokenData";
 import {  addPlaylistVideo } from "@/validation/addUserData";
-import { eq } from "drizzle-orm";
+import { eq, and } from "drizzle-orm";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
@@ -34,7 +34,10 @@ export async function POST(req: NextRequest) {
         const { link, title, description, playlistId } = parseJson.data
 
         const playlist = await db.select().from(playlistsTable).where(
-            eq(playlistsTable.id, playlistId)
+            and(
+                eq(playlistsTable.id, playlistId),
+                eq(playlistsTable.accountId, accountId)
+            )
         ).then(res => res[0])
 
         if( !playlist ) {
