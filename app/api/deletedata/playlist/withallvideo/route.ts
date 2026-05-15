@@ -50,19 +50,22 @@ export async function POST(req: NextRequest) {
             }, {status: 404})
         }
 
-        const videos = await db.delete(videosTable).where(
-            and(
-                eq(videosTable.playlistId, playlistId),
-                eq(videosTable.accountId, accountId)
-            )
-        )
 
-        const playlistDelete = await db.delete(playlistsTable).where(
-            and(
-                eq(playlistsTable.id, playlistId),
-                eq(playlistsTable.accountId, accountId)
-            )
-        )
+        const playlistDelete = await db.transaction( async (tx) => {
+            await tx.delete(videosTable).where(
+                and(
+                    eq(videosTable.playlistId, playlistId),
+                    eq(playlistsTable.accountId, accountId)
+                )
+            );
+
+            await tx.delete(playlistsTable).where(
+                and(
+                    eq(playlistsTable.id, playlistId),
+                    eq(playlistsTable.accountId, accountId)
+                )
+            );
+        })
 
         return NextResponse.json({
             message: "playlist and videos deleted successfully"
