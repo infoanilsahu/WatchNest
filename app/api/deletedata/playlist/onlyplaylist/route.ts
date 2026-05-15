@@ -5,17 +5,12 @@ import { deletePlaylist } from "@/validation/deleteData";
 import { eq, and } from "drizzle-orm";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function POST(req: NextRequest) {
+export async function DELETE(req: NextRequest) {
     try {
 
-        let tokenData;
-        
-        try {
+        const tokenData = await TokenData("myJwt").catch(() => null)
 
-            tokenData = await TokenData("myJwt")
-
-        } catch (err: unknown) {
-            console.log("auth err: ", err)
+        if( !tokenData ) {
             return NextResponse.json({
                 message: "Unauthorized"
             }, { status: 401 });
@@ -27,7 +22,7 @@ export async function POST(req: NextRequest) {
         const parseJson = deletePlaylist.safeParse(json)
         if( !parseJson.success ) {
             return NextResponse.json({
-                message: parseJson.error
+                message: parseJson.error.message || "Invalid data"
             }, {status: 400})
         }
 
@@ -52,7 +47,10 @@ export async function POST(req: NextRequest) {
 
 
         const playlistDelete = await db.transaction( async (tx) => {
-            await tx.delete(videosTable).where(
+            await tx.update(videosTable).set({
+                playlistId: null
+            })
+            .where(
                 and(
                     eq(videosTable.playlistId, playlistId),
                     eq(videosTable.accountId, accountId)
@@ -68,7 +66,7 @@ export async function POST(req: NextRequest) {
         })
 
         return NextResponse.json({
-            message: "playlist and videos deleted successfully"
+            message: "playlist deleted successfully"
         }, {status: 200})
 
         
