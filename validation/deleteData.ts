@@ -11,3 +11,8 @@ export const deletePlaylistVideo = object({
     accountId: number().int().positive(),
 })
 
+export const deletePlaylist = object({
+    playlistId: number().int().positive(),
+    accountId: number().int().positive()
+})
+
