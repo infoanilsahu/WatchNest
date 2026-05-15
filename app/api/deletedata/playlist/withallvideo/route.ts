@@ -55,7 +55,7 @@ export async function POST(req: NextRequest) {
             await tx.delete(videosTable).where(
                 and(
                     eq(videosTable.playlistId, playlistId),
-                    eq(playlistsTable.accountId, accountId)
+                    eq(videosTable.accountId, accountId)
                 )
             );
 
