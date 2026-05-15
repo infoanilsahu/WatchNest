@@ -1,6 +1,6 @@
 import { number, object } from "zod";
 
 export const deleteVideo = object({
-    videoId: number(),
-    accountId: number()
+    videoId: number().int().positive(),
+    accountId: number().int().positive()
 })

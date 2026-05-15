@@ -1,7 +1,6 @@
 import { db } from "@/db/db";
-import { playlistsTable, videosTable } from "@/db/schema";
+import { videosTable } from "@/db/schema";
 import { TokenData } from "@/lib/tokenData";
-import {  addPlaylistVideo } from "@/validation/addUserData";
 import { deleteVideo } from "@/validation/deleteData";
 import { eq, and, isNull } from "drizzle-orm";
 import { NextRequest, NextResponse } from "next/server";
@@ -49,7 +48,7 @@ export async function POST(req: NextRequest) {
         if( !video ) {
             return NextResponse.json({
                 message: "video not exists",
-            }, {status: 400})
+            }, {status: 404})
         }
 
         return NextResponse.json({
