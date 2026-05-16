@@ -33,7 +33,7 @@ export async function POST(req: NextRequest) {
             }, {status: 403})
         }
 
-        const video = await db.update(videosTable).set({
+        const [video] = await db.update(videosTable).set({
             title, 
             description
         }).where(
@@ -46,6 +46,12 @@ export async function POST(req: NextRequest) {
             title: videosTable.title,
             description: videosTable.description
         })
+
+        if( !video ) {
+            return NextResponse.json({
+                message: "video not found"
+            }, {status: 404})
+        }
         
 
         return NextResponse.json({
