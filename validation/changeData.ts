@@ -7,3 +7,10 @@ export const changeVideoData = object({
     accountId: number().int().positive(),
 })
 
+export const changePlaylistData = object({
+    title: string(),
+    description: string(),
+    playlistId: number().int().positive(),
+    accountId: number().int().positive()
+})
+
