@@ -1,5 +1,5 @@
 import { db } from "@/db/db";
-import { playlistsTable, videosTable } from "@/db/schema";
+import { playlistsTable } from "@/db/schema";
 import { TokenData } from "@/lib/tokenData";
 import { changePlaylistData } from "@/validation/changeData";
 import { eq, and } from "drizzle-orm";
@@ -33,7 +33,7 @@ export async function POST(req: NextRequest) {
             }, {status: 403})
         }
 
-        const [video] = await db.update(playlistsTable).set({
+        const [playlist] = await db.update(playlistsTable).set({
             title, 
             description
         }).where(
@@ -47,7 +47,7 @@ export async function POST(req: NextRequest) {
             description: playlistsTable.description
         })
 
-        if( !video ) {
+        if( !playlist ) {
             return NextResponse.json({
                 message: "playlist not found"
             }, {status: 404})
@@ -55,8 +55,8 @@ export async function POST(req: NextRequest) {
         
 
         return NextResponse.json({
-            message: "playlist title and description successfully change",
-            video
+            message: "playlist title and description successfully changed",
+            playlist
         }, {status: 200})
         
     } catch (err: unknown) {
