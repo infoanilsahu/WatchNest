@@ -31,8 +31,8 @@ export async function POST(req: NextRequest) {
             }, { status: 400 })
         }
 
-        const { userId: reqUserId, playlistId } = parseJson.data
-        if (reqUserId !== userId) {
+        const { accountId: reqAccountId, playlistId } = parseJson.data
+        if (reqAccountId !== accountId ) {
             return NextResponse.json({
                 message: "invalid token"
             }, { status: 400 })
