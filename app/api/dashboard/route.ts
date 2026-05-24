@@ -54,12 +54,15 @@ export async function GET(req: NextRequest) {
         .select({
             id: playlistsTable.id,
             playlistName: playlistsTable.title,
-            videoLength: count(videosTable.id),
+            videoLength: count(videosTable.id).mapWith(Number),
         })
         .from(playlistsTable)
         .leftJoin(
             videosTable,
-            eq(videosTable.playlistId, playlistsTable.id)
+            and(
+                eq(videosTable.playlistId, playlistsTable.id),
+                eq(videosTable.accountId, accountId)
+            )
         )
         .where(eq(playlistsTable.accountId, accountId))
         .groupBy(playlistsTable.id, playlistsTable.title);
