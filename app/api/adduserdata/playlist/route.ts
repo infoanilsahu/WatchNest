@@ -40,7 +40,8 @@ export async function POST(req: NextRequest) {
         }).returning().then((res) => res[0])
 
         return NextResponse.json({
-            message: "playlist added successfully"
+            message: "playlist added successfully",
+            playlist
         }, {status: 200})
         
 
