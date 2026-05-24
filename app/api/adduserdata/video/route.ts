@@ -42,6 +42,7 @@ export async function POST(req: NextRequest) {
 
         return NextResponse.json({
             message: "video uploaded successfully",
+            video
         }, {status: 200})
         
 

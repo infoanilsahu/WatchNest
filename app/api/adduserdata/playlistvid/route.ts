@@ -57,6 +57,7 @@ export async function POST(req: NextRequest) {
         
         return NextResponse.json({
             message: "video added in playlist successfully",
+            video
         }, {status: 200})        
 
         
