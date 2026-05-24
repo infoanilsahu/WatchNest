@@ -53,8 +53,9 @@ export async function GET(req: NextRequest) {
         const playlistsWithCount = await db
         .select({
             id: playlistsTable.id,
-            playlistName: playlistsTable.title,
+            title: playlistsTable.title,
             videoLength: count(videosTable.id).mapWith(Number),
+            visible: playlistsTable.visible
         })
         .from(playlistsTable)
         .leftJoin(
