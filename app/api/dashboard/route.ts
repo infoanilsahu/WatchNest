@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 import jwt, { JwtPayload } from "jsonwebtoken"
 import { db } from "@/db/db";
 import { accountTable, playlistsTable, videosTable } from "@/db/schema";
-import { and, eq, isNull } from "drizzle-orm";
+import { and, eq, isNull, count } from "drizzle-orm";
 
 if( !process.env.JWT_SECRET ) {
     throw new Error("jwt secret not found ")
@@ -50,21 +50,24 @@ export async function GET(req: NextRequest) {
             )
         )
 
-        const playlists = await db.select().from(playlistsTable).where(
-            eq(playlistsTable.accountId, accountId)
-        )
-
-        const playlistName: playlistNameProp[] = playlists.map((playlist) => {
-            return {
-                id: playlist.id,
-                playlistName: playlist.title
-            }
+        const playlistsWithCount = await db
+        .select({
+            id: playlistsTable.id,
+            playlistName: playlistsTable.title,
+            videoLength: count(videosTable.id),
         })
+        .from(playlistsTable)
+        .leftJoin(
+            videosTable,
+            eq(videosTable.playlistId, playlistsTable.id)
+        )
+        .where(eq(playlistsTable.accountId, accountId))
+        .groupBy(playlistsTable.id, playlistsTable.title);
 
 
         return NextResponse.json({
             user: userData,
-            playlist: playlistName,
+            playlist: playlistsWithCount,
             videos: videos
         }, {status: 200})
 
