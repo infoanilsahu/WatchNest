@@ -68,7 +68,8 @@ export async function DELETE(req: NextRequest) {
         })
 
         return NextResponse.json({
-            message: "playlist and videos deleted successfully"
+            message: "playlist and videos deleted successfully",
+            playlist
         }, {status: 200})
 
         
