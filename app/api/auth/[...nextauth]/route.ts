@@ -4,6 +4,7 @@ import { db } from "../../../../db/db";
 import { accountTable, usersTable } from "../../../../db/schema";
 import { eq } from "drizzle-orm";
 import jwt, { SignOptions } from "jsonwebtoken";
+import { isExpired } from "@/lib/refreashToken";
 
 
 
@@ -47,14 +48,18 @@ export const authOptions: NextAuthOptions = {
 
     async jwt({user, token, trigger, session}) {
 
-      if(user) {        
+      const shouldRefresh = !token.myJwt || isExpired(token.myJwt);
 
-        if( !user.email ) {
+      if(user || shouldRefresh ) {  
+        
+        const email = user?.email || token.email
+
+        if( !email ) {
           throw new Error("email is missing ");
         }
 
         const existUser = await db.select().from(usersTable).where(
-          eq(usersTable.email, user.email)
+          eq(usersTable.email, email)
         )
 
         if( existUser.length === 0 ) {

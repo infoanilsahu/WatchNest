@@ -32,14 +32,12 @@ export async function GET(req: NextRequest) {
             tokenData = await TokenData("myJwt")
 
         } catch (err: unknown) {
-            console.log("auth err: ", err)
             return NextResponse.json({
                 message: "Unauthorized"
             }, { status: 401 });
         }
 
         const { accountId, userId, email} = tokenData
-        console.log("token data", accountId, " ", userId, " ", email);
         
 
         const userData = await db.select().from(accountTable).where(
