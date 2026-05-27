@@ -4,7 +4,6 @@ import { db } from "../../../../db/db";
 import { accountTable, usersTable } from "../../../../db/schema";
 import { eq } from "drizzle-orm";
 import jwt, { SignOptions } from "jsonwebtoken";
-import { cookiesToken, GetCookiesToken } from "@/lib/tokenStoreCookies";
 
 
 
@@ -25,6 +24,9 @@ export const authOptions: NextAuthOptions = {
     }),
     // ...add more providers here
   ],
+  session: {
+    strategy: "jwt"
+  },
   callbacks: {
     async signIn({ user }) {
 
@@ -88,7 +90,6 @@ export const authOptions: NextAuthOptions = {
         token.myJwt = myJwt;
         token.hasAccount = true;
 
-        cookiesToken("myJwt",myJwt);
         
 
       }
@@ -130,16 +131,7 @@ export const authOptions: NextAuthOptions = {
         token.myJwt = myJwt;
         token.hasAccount = true;
 
-        await cookiesToken("myJwt",myJwt);
 
-      }
-      else {
-        const { hasToken, token: Token } = await GetCookiesToken("myJwt")
-        if( hasToken === true ) {
-          token.hasAccount = true
-          token.myJwt = Token
-        }
-        
       }
       
   
