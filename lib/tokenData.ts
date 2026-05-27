@@ -1,6 +1,8 @@
 import { cookies } from "next/headers";
 import { token } from "@/validation/token";
 import jwt from "jsonwebtoken"
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 
 interface TokenProp {
     userId: number;
@@ -9,8 +11,12 @@ interface TokenProp {
 }
 
 export async function TokenData(str: string): Promise<TokenProp> {
-    const cookieStore = await cookies();
-    const decodedToken = cookieStore.get(str)
+    
+    const session = await getServerSession(authOptions)
+
+    if( !session ) throw new Error("Unauthorized")
+    const decodedToken = session.myJwt
+
     if( !decodedToken ) {
         throw new Error("Unauthorized")
     }
@@ -22,7 +28,7 @@ export async function TokenData(str: string): Promise<TokenProp> {
     let payload;
 
     try {
-        payload = jwt.verify(decodedToken.value, process.env.JWT_SECRET)
+        payload = jwt.verify(decodedToken, process.env.JWT_SECRET)
     } catch (err: unknown) {
         throw new Error("Invalid token")
     }

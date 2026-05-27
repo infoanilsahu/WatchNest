@@ -4,6 +4,7 @@ import jwt, { JwtPayload } from "jsonwebtoken"
 import { db } from "@/db/db";
 import { accountTable, playlistsTable, videosTable } from "@/db/schema";
 import { and, eq, isNull, count } from "drizzle-orm";
+import { TokenData } from "@/lib/tokenData";
 
 if( !process.env.JWT_SECRET ) {
     throw new Error("jwt secret not found ")
@@ -24,17 +25,20 @@ export async function GET(req: NextRequest) {
     
     try {
 
-        const cookieStore = await cookies()
-        const token = cookieStore.get("myJwt")
-        if( !token ) {
+        let tokenData;
+        
+        try {
+
+            tokenData = await TokenData("myJwt")
+
+        } catch (err: unknown) {
             return NextResponse.json({
-                message: "unauthorized."
-            }, {status: 401})
+                message: "Unauthorized"
+            }, { status: 401 });
         }
 
-        const userToken = jwt.verify(token.value, process.env.JWT_SECRET!) as MyTokenPayload
-
-        const { accountId, userId, email} = userToken
+        const { accountId, userId, email} = tokenData
+        
 
         const userData = await db.select().from(accountTable).where(
             eq(accountTable.id, accountId)
