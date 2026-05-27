@@ -1,6 +1,4 @@
-import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
-import jwt, { JwtPayload } from "jsonwebtoken"
 import { db } from "@/db/db";
 import { accountTable, playlistsTable, videosTable } from "@/db/schema";
 import { and, eq, isNull, count } from "drizzle-orm";
@@ -8,17 +6,6 @@ import { TokenData } from "@/lib/tokenData";
 
 if( !process.env.JWT_SECRET ) {
     throw new Error("jwt secret not found ")
-}
-
-interface MyTokenPayload extends JwtPayload {
-    userId: number;
-    email: string;
-    accountId: number;
-}
-
-interface playlistNameProp {
-    id: number;
-    playlistName: string;
 }
 
 export async function GET(req: NextRequest) {
