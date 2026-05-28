@@ -21,10 +21,18 @@ export async function proxy(req: NextRequest) {
   }
 
   // Unauthenticated user cannot access dashboard
-  if (!token?.hasAccount && 
-    (pathname.startsWith("/dashboard") || pathname.startsWith("/account"))) {
+  if (!token && 
+    (pathname.startsWith("/dashboard") || pathname.startsWith("/account"))
+  ) {
       return NextResponse.redirect(
         new URL("/auth/login", req.url)
+      );
+  }
+  else if( token &&
+    (pathname.startsWith("/dashboard") || pathname.startsWith("/account"))
+  ) {
+    return NextResponse.redirect(
+        new URL("/auth/account", req.url)
       );
   }
 
