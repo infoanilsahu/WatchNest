@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 
 import {
   Play,
@@ -15,8 +14,7 @@ import { Button } from "../ui/button";
 import { Card } from "../ui/card";
 
 interface VideoUnitProp {
-  loading: boolean;
-  clickDelete: () => void;
+  index: number;
   video: {
     title: string;
     description: string;
@@ -25,9 +23,8 @@ interface VideoUnitProp {
   };
 }
 
-export function VideoUnit({ video, loading, clickDelete }: VideoUnitProp) {
+export function VideoUnitPublic({ index, video }: VideoUnitProp) {
   const [expanded, setExpanded] = useState(false);
-  const router = useRouter();
 
   return (
     <Card
@@ -132,42 +129,6 @@ export function VideoUnit({ video, loading, clickDelete }: VideoUnitProp) {
                     {video.description}
                   </p>
 
-                  {/* Action Buttons */}
-                  <div className="mt-5 flex  gap-3">
-                    <Button
-                      size="sm"
-                      disabled={loading}
-                      className="
-                        disabled:opacity-55
-                        rounded-[14px]
-                        border border-[#6C4DFF]/30
-                        bg-[#6C4DFF]/10
-                        text-[#A78BFA]
-                        hover:bg-[#6C4DFF]/20
-                      "
-                    >
-                      <Pencil className="mr-2 h-4 w-4" />
-                      Edit
-                    </Button>
-
-                    <Button
-                      onClick={clickDelete}
-                      disabled={loading}
-                      size="sm"
-                      className="
-                        disabled:opacity-55
-                        rounded-[14px]
-                        border border-[#F43F5E]/30
-                        bg-[#F43F5E]/10
-                        text-[#F43F5E]
-                        hover:bg-[#F43F5E]/20
-                      "
-                    >
-                      <Trash2 className="mr-2 h-4 w-4" />
-                      Delete
-                    </Button>
-
-                  </div>
                 </div>
               )}
             </div>
@@ -191,28 +152,6 @@ export function VideoUnit({ video, loading, clickDelete }: VideoUnitProp) {
               "
             >
               <Play className="ml-0.5 h-4 w-4 fill-[#22C55E] text-[#22C55E] sm:h-5 sm:w-5" />
-            </Button>
-
-            {/* Toggle Button */}
-            <Button
-              size="icon"
-              onClick={() => setExpanded(!expanded)}
-              className="
-                h-10 w-10 rounded-full
-                border border-[#2A3348]
-                bg-[#0B1023]/70
-                text-[#94A3B8]
-                transition-all duration-300
-                hover:bg-[#141C31]
-                hover:text-white
-              "
-            >
-              <ChevronDown
-                className={`
-                  h-5 w-5 transition-transform duration-300
-                  ${expanded ? "rotate-180" : ""}
-                `}
-              />
             </Button>
 
             

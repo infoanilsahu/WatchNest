@@ -17,7 +17,7 @@ export default function Login() {
       router.push("/auth/account");
     }
     else if( status === "authenticated" && session.hasAccount == true ) {
-        router.push("/dashboard")
+        router.push("/dashboard/videos")
     }
   }, [status, router, session?.hasAccount]);
 
@@ -31,7 +31,7 @@ export default function Login() {
 
   return (
     <div className="h-screen flex items-center justify-center bg-muted">
-      <Card className="w-[350px] shadow-lg">
+      <Card className="w-87.5 shadow-lg">
         <CardHeader>
           <CardTitle className="text-center text-2xl">
             Login

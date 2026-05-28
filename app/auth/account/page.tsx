@@ -22,8 +22,8 @@ export default function Account() {
 
     useEffect(() => {
         if( status === "authenticated" && session.hasAccount === true ) {
-            
-            router.push("/dashboard")
+                       
+            router.push("/dashboard/videos")
         }
         else if( status === "unauthenticated" ) router.push("/auth/login")
     }, [status, router, session])
@@ -47,7 +47,7 @@ export default function Account() {
 
                 if( res.status === 200 || res.status === 201 ) {
                     await update({ userId: res.data.account[0].userId })
-                    router.push("/dashboard")
+                    router.push("/dashboard/videos")
                 }
 
             } catch (err: any) {
