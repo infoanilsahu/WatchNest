@@ -1,4 +1,4 @@
-import { ListVideo, MoreHorizontal, Play } from "lucide-react";
+import { ListVideo, UserRound, Play } from "lucide-react";
 import { Button } from "../ui/button";
 import watchnest from "./../../assests/logo.svg"
 import { useRouter } from "next/navigation";
@@ -42,7 +42,7 @@ export function Navbar({tool}: NavbarProp) {
               variant="ghost"
               className=" h-3 md:h-12 w-3 md:w-12 rounded-full border border-[#2A3348] bg-[#111827]/70 hover:bg-white/10"
             >
-              <MoreHorizontal className="h-5 w-5 text-white" />
+              <UserRound className="h-6! w-6! text-white" />
             </Button>
           </div>
 
@@ -71,7 +71,7 @@ export function Navbar({tool}: NavbarProp) {
               variant="ghost"
               className=" h-12 w-12 rounded-full border border-[#2A3348] bg-[#111827]/70 hover:bg-white/10"
             >
-              <MoreHorizontal className="h-5 w-5 text-white" />
+              <UserRound className="h-5! w-5! text-white" />
             </Button>
           </div>
 

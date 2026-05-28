@@ -6,8 +6,7 @@ import { toast } from "sonner"
 import * as z from "zod"
 
 import { Button } from "@/components/ui/button"
-
-import { videoProp } from "@/types/video";
+import { playlistProp } from "@/types/playlist"
 
 import {
   Card,
@@ -18,10 +17,12 @@ import {
 
 import {
   Field,
+  FieldContent,
   FieldDescription,
   FieldError,
   FieldGroup,
   FieldLabel,
+  FieldTitle,
 } from "@/components/ui/field"
 
 import { Input } from "@/components/ui/input"
@@ -33,63 +34,89 @@ import {
   InputGroupTextarea,
 } from "@/components/ui/input-group"
 
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+
 import {
   Plus,
-  Link2,
 } from "lucide-react"
-import { useState } from "react"
 import axios from "axios"
+import { Dispatch, SetStateAction, useState } from "react"
+
+type PlanType = {
+  id: string;
+  title: string;
+  description: string;
+};
+
+const plans: PlanType[] = [
+  {
+    id: "public",
+    title: "Public",
+    description: "Visible and accessible to everyone.",
+  },
+  {
+    id: "private",
+    title: "Private",
+    description: "Accessible only to you.",
+  },
+];
 
 const formSchema = z.object({
-  title: z
+  playlistName: z
     .string()
     .min(3, "Title must be at least 3 characters.")
-    .max(30, "Title must be less than 50 characters."),
+    .max(30, "Title must be less than 30 characters."),
 
   description: z
     .string()
-    .max(200, "Description must be less than 120 characters.")
+    .max(200, "Description must be less than 200 characters.")
     .optional(),
 
-  link: z.string().url("Please enter a valid URL."),
+  visible: z.enum(["public", "private"]),
 })
 
-export function VideoForm({ playlistId, reqLink, setVideo }: VideoFormProp) {
+export function PlaylistForm({ reqLink, setPlaylist }: PlaylistFormProp) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
 
     defaultValues: {
-      title: "",
+      playlistName: "",
       description: "",
-      link: "",
+      visible: "private",
     },
   })
 
+  const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const [loading, setLoading] = useState<boolean>(false)
 
-  const handleSubmit = async ( input: z.infer<typeof formSchema>) => {
+  const handleSubmit = async (input: z.infer<typeof formSchema>) => {
     try {
 
       setLoading(true)
 
-      const { title, description, link} = input
+      const { playlistName, description, visible} = input
 
 
       const res = await axios({
           method: "POST",
           url: reqLink,
           data: {
-              title, description, link, playlistId
+              title: playlistName, description, visible
           }
       })
 
       if( res.status === 200 ) {
+        const { playlist } = res.data
 
-        const { video } = res.data
+        setPlaylist((prev) => [...prev, {
+          id: playlist.id,
+          title: playlist.title,
+          videoLength: 0,
+          visible: playlist.visible
+        }])
 
-        setVideo((prev) => [...prev, video])
         form.reset()
+
       }
       
     } catch (err: unknown) {
@@ -111,12 +138,14 @@ export function VideoForm({ playlistId, reqLink, setVideo }: VideoFormProp) {
   }
 
   function onSubmit(data: z.infer<typeof formSchema>) {
-    toast.success("Video Added Successfully", {
+    
+    toast.success("Playlist Added Successfully", {
       description: (
         <pre className="mt-2 w-[320px] overflow-x-auto rounded-xl bg-[#111827] p-4 text-white">
           <code>{JSON.stringify(data, null, 2)}</code>
         </pre>
       ),
+
     })
 
     handleSubmit(data)
@@ -130,7 +159,7 @@ export function VideoForm({ playlistId, reqLink, setVideo }: VideoFormProp) {
 
             <CardHeader className="flex justify-center">
               <CardTitle className="font-['Poppins'] text-xl text-white font-medium">
-                Add Video
+                Add Playlist
               </CardTitle>
             </CardHeader>
 
@@ -145,20 +174,20 @@ export function VideoForm({ playlistId, reqLink, setVideo }: VideoFormProp) {
 
                   {/* Title */}
                   <Controller
-                    name="title"
+                    name="playlistName"
                     control={form.control}
                     render={({ field, fieldState }) => (
                       <Field data-invalid={fieldState.invalid}>
 
                         <FieldLabel className="mb-2 text-[#CBD5E1]">
-                          Title
+                          Playlist Name :
                         </FieldLabel>
 
                         <InputGroup className="focus-visible:border-ring focus-visible:right-3 focus-visible:ring-[#8B5CFF]/30" >
 
                             <Input
                             {...field}
-                            placeholder=" Enter video title"
+                            placeholder="Enter playlist name "
                             className="h-14 rounded-[12px] border-[#2A3348] bg-[#111827] text-white placeholder:text-[#64748B] "
                             />
 
@@ -225,26 +254,64 @@ export function VideoForm({ playlistId, reqLink, setVideo }: VideoFormProp) {
 
                   {/* Link */}
                   <Controller
-                    name="link"
+                    name="visible"
                     control={form.control}
                     render={({ field, fieldState }) => (
                       <Field data-invalid={fieldState.invalid}>
 
-                        <FieldLabel className="mb-2 text-[#CBD5E1]">
-                          Video Link
-                        </FieldLabel>
+                        <RadioGroup
+                          name={field.name}
+                          value={field.value || "private"}
+                          onValueChange={field.onChange}
+                          aria-invalid={fieldState.invalid}
+                          className="grid grid-cols-2 gap-3"
+                        >
+                          {plans.map((plan) => {
+                            const isSelected = (field.value || "private") === plan.id;
 
-                        <div className="relative">
+                            return (
+                              <FieldLabel
+                                key={plan.id}
+                                htmlFor={`form-rhf-radiogroup-${plan.id}`}
+                                className={`
+                                  group relative cursor-pointer rounded-xl border px-3 py-2 transition-all duration-200
+                                  ${
+                                    isSelected
+                                      ? "border-blue-500 bg-blue-500/10 shadow-[0_0_20px_rgba(59,130,246,0.12)]"
+                                      : "border-white/20 bg-white/2 hover:border-white/40 hover:bg-white/4"
+                                  }
+                                `}
+                              >
+                                <Field
+                                  orientation="horizontal"
+                                  data-invalid={fieldState.invalid}
+                                  className="flex items-center justify-between gap-2"
+                                >
+                                  <FieldContent className="space-y-1">
+                                    <FieldTitle className="text-base font-semibold capitalize text-white leading-none">
+                                      {plan.title}
+                                    </FieldTitle>
 
-                          <Link2 className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-[#8B5CFF]" />
+                                    <FieldDescription className="text-xs text-zinc-400 leading-tight">
+                                      {plan.description}
+                                    </FieldDescription>
+                                  </FieldContent>
 
-                          <Input
-                            {...field}
-                            placeholder="https://youtube.com/..."
-                            className="h-14 rounded-[12px] border-[#2A3348] bg-[#111827] pl-12 text-white placeholder:text-[#64748B] focus-visible:ring-[#8B5CFF]/30 focus-visible:border-ring focus-visible:ring-3 "
-                          />
-
-                        </div>
+                                  <RadioGroupItem
+                                    value={plan.id}
+                                    id={`form-rhf-radiogroup-${plan.id}`}
+                                    aria-invalid={fieldState.invalid}
+                                    className="
+                                      border-white/40 text-blue-500
+                                      data-[state=checked]:border-blue-500
+                                      data-[state=checked]:bg-blue-500
+                                    "
+                                  />
+                                </Field>
+                              </FieldLabel>
+                            );
+                          })}
+                        </RadioGroup>
 
                         {fieldState.invalid && (
                           <FieldError errors={[fieldState.error]} />
@@ -254,25 +321,23 @@ export function VideoForm({ playlistId, reqLink, setVideo }: VideoFormProp) {
                     )}
                   />
 
-                  {error && (
-                    <p className="text-red-500">{error}</p>
-                  )}
-
                 </FieldGroup>
+
+                {error && <div className="text-red-500 font-normal">{error}</div>}
 
                 <Field orientation="horizontal" className="w-full gap-7 flex items-center justify-center">
 
-                  <Button type="button" disabled={loading} onClick={() => form.reset()} className={`h-14 px-6 bg-transparent border border-amber-50 text-lg font-semibold disabled:opacity-55 `}> 
+                  <Button disabled={loading} type="button" onClick={() => form.reset()} className="h-14 px-6 bg-transparent border border-amber-50 text-lg font-semibold disabled:opacity-55 "> 
                     Reset
                   </Button>
 
                   <Button
-                    type="submit"
                     disabled={loading}
-                    className="h-14 rounded-[14px] border-0 bg-linear-to-r from-[#6C4DFF] to-[#8B5CFF] font-['Poppins'] text-lg font-semibold shadow-[0_0_40px_rgba(108,77,255,0.25)] transition-all duration-300 hover:scale-[1.01] hover:from-[#7C5CFF] hover:to-[#8B5CFF] disabled:opacity-55 "
+                    type="submit"
+                    className="h-14 pr-4 rounded-[14px] border-0 bg-linear-to-r from-[#6C4DFF] to-[#8B5CFF] font-['Poppins'] text-lg font-semibold shadow-[0_0_40px_rgba(108,77,255,0.25)] transition-all duration-300 hover:scale-[1.01] hover:from-[#7C5CFF] hover:to-[#8B5CFF] disabled:opacity-55"
                   >
                     <Plus size="10px" className="mr-1"  />
-                    Add Video
+                    Playlist
                   </Button>
 
                 </Field>
@@ -288,10 +353,7 @@ export function VideoForm({ playlistId, reqLink, setVideo }: VideoFormProp) {
 }
 
 
-interface VideoFormProp {
-  playlistId: number | null;
+interface PlaylistFormProp {
   reqLink: string;
-  setVideo: React.Dispatch<React.SetStateAction<videoProp[]>>;
+  setPlaylist: Dispatch<SetStateAction<playlistProp[]>>
 }
-
-
