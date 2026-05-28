@@ -28,7 +28,7 @@ export async function proxy(req: NextRequest) {
         new URL("/auth/login", req.url)
       );
   }
-  else if( token &&
+  else if( !token?.hasAccount &&
     (pathname.startsWith("/dashboard") || pathname.startsWith("/account"))
   ) {
     return NextResponse.redirect(
