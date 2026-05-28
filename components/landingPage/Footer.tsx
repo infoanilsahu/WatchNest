@@ -28,7 +28,7 @@ export function Footer() {
           {/* Brand */}
           <div style={{ flex: "1 1 240px", minWidth: 200 }}>
             <div className="w-60" style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 14 }}>
-              <img src={watchnest.src} alt="" />
+              <img src={watchnest.src} alt="watchnest logo" />
             </div>
             <p style={{ color: C.textMuted, fontSize: 14, lineHeight: 1.7, marginBottom: 20 }}>
               Your space to save, organize and share videos in playlists.
