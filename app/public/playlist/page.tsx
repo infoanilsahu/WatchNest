@@ -4,13 +4,22 @@ import { NavbarHome } from "@/components/common/NavbarHome";
 import { VideoUnitPublic } from "@/components/common/videoUnitPublic";
 import axios from "axios";
 import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { ErrorPage } from "@/components/common/ErrorHandlePage";
 import { PlaylistTitle } from "@/components/common/PlaylistTitle";
 import { UserAccountShow } from "@/components/common/UserAccountShow";
 
+export const dynamic = "force-dynamic";
 
-export default function PlaylistPage() {
+export default function PublicPlaylistPage() {
+    return (
+        <Suspense fallback={null} >
+            <PublicPlaylistContant />
+        </Suspense>
+    )
+}
+
+function PublicPlaylistContant() {
     const searchParams = useSearchParams()
     
     const accountId = Number(searchParams.get("accountId"));

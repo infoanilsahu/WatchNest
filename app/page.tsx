@@ -7,17 +7,15 @@ import { PrivacySection } from "@/components/landingPage/PrivacySection";
 import { HowItWorks } from "@/components/landingPage/HowItWorks";
 import { CTASection } from "@/components/landingPage/CTASection";
 import { Footer } from "@/components/landingPage/Footer";
+import { GlowOrb } from "@/components/landingPage/GlowOrb";
+import { C } from "@/components/landingPage/colors";
 
 export default function Home() {
   return (
-    <div style={styles.page} className="">
+    <div className="w-full min-h-screen bg-[#050816] font-['Inter'] text-white">
       <NavbarHome />
       <HeroSection />
-      <FeaturesHighlight />
-      <PrivacySection />
-      <HowItWorks />
-      <CTASection />
-      <Footer />
+      
     </div>
   );
 }
