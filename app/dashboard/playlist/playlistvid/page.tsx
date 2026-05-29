@@ -5,14 +5,21 @@ import { VideoForm } from "@/components/common/videoInput";
 import { VideoUnit } from "@/components/common/videoUnit";
 import axios from "axios";
 import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { Suspense ,useEffect, useState } from "react";
 import { ErrorPage } from "@/components/common/ErrorHandlePage";
 import { PlaylistTitle } from "@/components/common/PlaylistTitle";
 import { DeleteVideo } from "@/lib/deleteFunction";
 
+export const dynamic = "force-dynamic";
+
+export default function PlaylistVidPage() {
+    <Suspense fallback={null} >
+        <PlaylistvidContant />
+    </Suspense>
+}
 
 
-export default function PlaylistPage() {
+function PlaylistvidContant() {
     const searchParams = useSearchParams()
     
     const accountId = Number(searchParams.get("accountId"));

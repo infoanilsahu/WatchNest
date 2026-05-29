@@ -17,7 +17,7 @@ export function NavbarHome() {
           </div>
 
           <div className="flex items-center gap-4   ">
-            <div className="flex items-center rounded-[8px] ">
+            <div className="flex items-center rounded-[8px] gap-0.5 md:gap-5 ">
               <Button onClick={() => router.push("/")} 
               variant="ghost"
               className={`rounded-[6px]  text-[#CBD5E1] hover:bg-white/5 hover:text-white`}>

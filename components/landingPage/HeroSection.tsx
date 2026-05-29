@@ -3,91 +3,122 @@ import { Badge } from "./Badge";
 import { ArrowRight, Check, Play } from "lucide-react";
 import { C } from "./colors";
 import { styles } from "./styles";
-import { DashboardPreview } from "./DashboardPreview";
-
+// import Image from "next/image";
+import preview from "./../../assests/preview.png";
 
 export function HeroSection() {
   return (
-    <section
-      style={{
-        position: "relative",
-        overflow: "hidden",
-        padding: "80px 24px 100px",
-      }}
-    >
-      <GlowOrb x="-10%" y="-20%" color={C.primary} size={600} opacity={0.18} />
-      <GlowOrb x="60%" y="10%" color={C.accent} size={500} opacity={0.12} />
+    <section className="relative flex w-full overflow-hidden bg-[#050816] py-1 px-3 text-white ">
+      
+      
 
-      <div style={{ maxWidth: 1120, margin: "0 auto", position: "relative", zIndex: 1 }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 64, flexWrap: "wrap" }}>
-          {/* Left */}
-          <div style={{ flex: "1 1 420px" }}>
-            <Badge>Your Videos. Your Playlists.</Badge>
-            <h1
-              style={{
-                fontFamily: "'Poppins', sans-serif",
-                fontSize: "clamp(40px, 5vw, 64px)",
-                fontWeight: 800,
-                lineHeight: 1.1,
-                margin: "0 0 8px",
-                letterSpacing: "-0.02em",
-              }}
+      {/* Main Container */}
+      <div className="relative z-10 mx-auto flex w-full max-w-7xl flex-col items-center justify-between gap-2 lg:flex-row">
+        
+        {/* Left Content */}
+        <div className="flex w-full lg:pl-5 max-w-2xl flex-col items-center text-center lg:items-start lg:text-left">
+          
+          <Badge>Your Videos. Your Playlists.</Badge>
+
+          <h1
+            style={{
+              fontFamily: "'Poppins', sans-serif",
+              fontSize: "clamp(2.6rem, 7vw, 5rem)",
+              fontWeight: 800,
+              lineHeight: 1.05,
+              letterSpacing: "-0.03em",
+              marginTop: 18,
+            }}
+          >
+            Save. Organize.
+            <br />
+            Share. Watch.
+            <br />
+            <span style={styles.gradText}>Together.</span>
+          </h1>
+
+          <p
+            className="mt-6 max-w-xl text-sm leading-7 sm:text-base"
+            style={{ color: C.textSec }}
+          >
+            WatchNest lets you save videos from anywhere,
+            organize them into playlists, and share with
+            anyone. Your library, your way.
+          </p>
+
+          {/* Buttons */}
+          <div className="mt-8 flex w-full flex-col gap-4 sm:w-auto sm:flex-row">
+            
+            <button
+              style={styles.btnPrimary}
+              className="flex items-center justify-center gap-2"
             >
-              Save. Organize.
-              <br />
-              Share. Watch.
-              <br />
-              <span style={styles.gradText}>Together.</span>
-            </h1>
-            <p style={{ color: C.textSec, fontSize: 17, lineHeight: 1.7, margin: "20px 0 36px", maxWidth: 460 }}>
-              WatchNest lets you save videos from anywhere, organize them into playlists, and share with anyone.
-              Your library, your way.
-            </p>
-            <div style={{ display: "flex", gap: 14, flexWrap: "wrap" }}>
-              <button style={styles.btnPrimary}>
-                Get Started for Free <ArrowRight size={16} />
-              </button>
-              <button style={styles.btnSecondary}>
-                <div
-                  style={{
-                    width: 28,
-                    height: 28,
-                    borderRadius: "50%",
-                    background: `linear-gradient(135deg, ${C.primary}, ${C.accent})`,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    flexShrink: 0,
-                  }}
-                >
-                  <Play size={10} fill="#fff" color="#fff" />
-                </div>
-                Watch Demo
-              </button>
-            </div>
-            <div
-              style={{
-                marginTop: 16,
-                display: "flex",
-                alignItems: "center",
-                gap: 6,
-                color: C.textMuted,
-                fontSize: 13,
-              }}
+              Get Started for Free
+              <ArrowRight size={16} />
+            </button>
+
+            <button
+              style={styles.btnSecondary}
+              className="flex items-center justify-center gap-3"
             >
-              <Check size={14} color={C.green} />
-              No credit card required
-            </div>
+              <div
+                style={{
+                  width: 28,
+                  height: 28,
+                  borderRadius: "50%",
+                  background: `linear-gradient(135deg, ${C.primary}, ${C.accent})`,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  flexShrink: 0,
+                }}
+              >
+                <Play size={10} fill="#fff" color="#fff" />
+              </div>
+
+              Watch Demo
+            </button>
           </div>
 
-          {/* Right — dashboard preview */}
-          <div style={{ flex: "1 1 400px", display: "flex", justifyContent: "flex-end" }}>
-            <DashboardPreview />
+          {/* Bottom Text */}
+          <div
+            className="mt-5 flex items-center gap-2 text-sm"
+            style={{ color: C.textMuted }}
+          >
+            <Check size={14} color={C.green} />
+            No credit card required
+          </div>
+        </div>
+
+        {/* Right Preview */}
+        <div className="flex w-full justify-center lg:justify-end">
+          
+          <div className="relative w-full max-w-900">
+            
+            <div
+              className="absolute inset-0 rounded-[32px] blur-3xl"
+              style={{
+                background: `linear-gradient(135deg, ${C.primary}40, ${C.accent}30)`,
+              }}
+            />
+
+            <img
+              src={preview.src}
+              alt="WatchNest Preview"
+              className="relative w-full z-10 rounded-[28px] border border-white/10 shadow-2xl"
+            />
+
+            {/* Optional Next Image */}
+            {/*
+            <Image
+              src={preview}
+              alt="WatchNest Preview"
+              className="relative z-10 w-full rounded-[28px] border border-white/10 shadow-2xl"
+            />
+            */}
           </div>
         </div>
       </div>
     </section>
   );
 }
-
-
