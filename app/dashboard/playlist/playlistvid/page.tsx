@@ -13,9 +13,11 @@ import { DeleteVideo } from "@/lib/deleteFunction";
 export const dynamic = "force-dynamic";
 
 export default function PlaylistVidPage() {
-    <Suspense fallback={null} >
-        <PlaylistvidContant />
-    </Suspense>
+    return (
+        <Suspense fallback={null} >
+            <PlaylistvidContant />
+        </Suspense>
+    )
 }
 
 

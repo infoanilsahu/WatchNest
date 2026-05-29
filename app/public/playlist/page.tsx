@@ -12,9 +12,11 @@ import { UserAccountShow } from "@/components/common/UserAccountShow";
 export const dynamic = "force-dynamic";
 
 export default function PublicPlaylistPage() {
-    <Suspense fallback={null} >
-        <PublicPlaylistContant />
-    </Suspense>
+    return (
+        <Suspense fallback={null} >
+            <PublicPlaylistContant />
+        </Suspense>
+    )
 }
 
 function PublicPlaylistContant() {

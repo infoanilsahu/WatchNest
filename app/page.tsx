@@ -12,7 +12,7 @@ import { C } from "@/components/landingPage/colors";
 
 export default function Home() {
   return (
-    <div className="w-full min-h-screen overflow-hidden bg-[#050816] font-['Inter'] text-white">
+    <div className="w-full min-h-screen bg-[#050816] font-['Inter'] text-white">
       <NavbarHome />
       <HeroSection />
       

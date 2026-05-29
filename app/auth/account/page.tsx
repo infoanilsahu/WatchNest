@@ -70,7 +70,7 @@ export default function Account() {
 
         router.push("/dashboard/videos");
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
       if (axios.isAxiosError(err)) {
         setError(
           err.response?.data.message ||
