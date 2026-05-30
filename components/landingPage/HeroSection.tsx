@@ -1,12 +1,18 @@
-import { GlowOrb } from "./GlowOrb";
+"use client"
+
+
 import { Badge } from "./Badge";
 import { ArrowRight, Check, Play } from "lucide-react";
 import { C } from "./colors";
 import { styles } from "./styles";
+import { useRouter } from "next/navigation";
 // import Image from "next/image";
 import preview from "./../../assests/preview.png";
 
 export function HeroSection() {
+
+  const router = useRouter()
+
   return (
     <section className="relative flex w-full overflow-hidden bg-[#050816] py-1 px-3 text-white ">
       
@@ -50,10 +56,11 @@ export function HeroSection() {
           <div className="mt-8 flex w-full flex-col gap-4 sm:w-auto sm:flex-row">
             
             <button
+              onClick={() => router.push("/auth/login")}
               style={styles.btnPrimary}
               className="flex items-center justify-center gap-2"
             >
-              Get Started for Free
+              Get Started
               <ArrowRight size={16} />
             </button>
 
