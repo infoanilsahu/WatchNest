@@ -30,7 +30,7 @@ export function NavbarHome() {
                 className={`rounded-[6px] border-0 bg-linear-to-r from-[#6C4DFF] to-[#8B5CFF] px-3 font-['Poppins'] text-base font-semibold text-white shadow-[0_0_40px_rgba(108,77,255,0.25)] hover:from-[#7C5CFF] hover:to-[#8B5CFF]`}
               >
                 <LogIn />
-                Sing In
+                Sign In
               </Button>
             </div>
 
