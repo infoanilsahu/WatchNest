@@ -35,10 +35,10 @@ WatchNest solves this problem by providing one centralized place where you can:
 
 Take one look at WatchNest in action.
 
-```md
+
 ![Landing Page](./assests/preview.png)
 
-```
+
 
 
 ---
