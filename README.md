@@ -1,36 +1,79 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🎬 WatchNest
 
-## Getting Started
+### Save it today. Watch it tomorrow.
 
-First, run the development server:
+WatchNest is a modern video bookmarking platform that helps you organize videos from YouTube and other platforms in one place. Instead of losing interesting videos in browser tabs, chat messages, or bookmarks, WatchNest lets you save, categorize, and share collections with anyone using a single link.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+---
+
+## Features
+
+* 📌 Save videos from multiple platforms
+* 📂 Organize videos into custom collections
+* 🏷️ Add tags and descriptions
+* 🔗 Share an entire collection with a single link
+* 🔐 Secure authentication
+* 🌙 Beautiful modern dark UI with glassmorphism
+
+---
+
+##  Problem It Solves
+
+We often come across useful or entertaining videos but forget to watch them later. They end up scattered across browser tabs, bookmarks, WhatsApp chats, Discord, Telegram, or social media.
+
+WatchNest solves this problem by providing one centralized place where you can:
+
+* Save videos instantly
+* Organize them into collections
+* Never lose track of videos
+* Share multiple videos with one link instead of sending them individually
+
+---
+
+
+## Preview
+
+Take one look at WatchNest in action.
+
+```md
+![Landing Page](./assests/preview.png)
+
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🛠️ Tech Stack
 
-## Learn More
+### Frontend
 
-To learn more about Next.js, take a look at the following resources:
+* React
+* Next.js
+* TypeScript
+* Tailwind CSS
+* shadcn/ui
+* Lucide React
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Backend
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+* Node.js
+* Express.js
+* TypeScript
+* NextAuth Authentication
 
-## Deploy on Vercel
+### Database
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+* PostgreSQL
+* Drizzle ORM
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### DevOps & Tools
+
+* Docker
+* Docker Compose
+* Git & GitHub
+
+---
+
+
+
+
