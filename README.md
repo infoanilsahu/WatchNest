@@ -66,11 +66,6 @@ Take one look at WatchNest in action.
 * PostgreSQL
 * Drizzle ORM
 
-### DevOps & Tools
-
-* Docker
-* Docker Compose
-* Git & GitHub
 
 ---
 
